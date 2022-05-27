@@ -24,11 +24,15 @@ html, body {
 
 #calculator {
     margin-top: 100px;
+    padding: 20px;
+    background-color: coral;
+    border-radius: 10px;
 }
 
 #screen {
     background-color: var(--screen-green);
     text-align: end;
+    height: 50px;
 }
 
 
@@ -40,6 +44,7 @@ html, body {
     grid-template-rows: repeat(5, 1fr);
     height: 300px;
     width: 300px;
+    padding: 10px 0;
 }
 
 footer {
