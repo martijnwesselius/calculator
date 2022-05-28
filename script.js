@@ -9,7 +9,8 @@ const numberButtons = document.querySelectorAll(".number-button");
 const operatorButtons = document.querySelectorAll(".operator-button");
 const clearButton = document.querySelector("#clear-button");
 const deleteButton = document.querySelector("#delete-button");
-const commaButton = document.querySelector("#comma-button");
+const signButton = document.querySelector("#sign-button");
+const pointButton = document.querySelector("#point-button");
 const equalsButton = document.querySelector("#equals-button");
 
 numberButtons.forEach(button => button.addEventListener("click", () => appendNumber(button.textContent)));
@@ -17,26 +18,33 @@ operatorButtons.forEach(button => button.addEventListener("click", () => setOper
 
 clearButton.addEventListener("click", clearScreen);
 deleteButton.addEventListener("click", deleteNumber);
-commaButton.addEventListener("click", addComma);
+signButton.addEventListener("click", changeSign);
+pointButton.addEventListener("click", appendPoint);
 equalsButton.addEventListener("click", evaluate);
 
 
 function appendNumber(number) {
+    if (evaluated) clearScreen();
     if (calculationScreen.textContent === "0") {
         calculationScreen.textContent = number;
     } else {
         calculationScreen.textContent += number;
+    }   
+    if (currentOperation !== null) {
+        secondOperand = calculationScreen.textContent.substring(
+            calculationScreen.textContent.indexOf(currentOperation) + 2
+        );
     }
 }
 
 function setOperation(operator) {
-    if (currentOperation !== null) evaluate();
+    if (currentOperation !== null && secondOperand !== "") evaluate(); 
     if (evaluated) calculationScreen.textContent = solutionScreen.textContent;
     firstOperand = calculationScreen.textContent;
     currentOperation = operator;
     calculationScreen.textContent = `${firstOperand} ${currentOperation} `;
+    evaluated = false;
 }
-
 
 function clearScreen() {
     calculationScreen.textContent = "0"
@@ -48,24 +56,35 @@ function clearScreen() {
 }
 
 function deleteNumber() {
-    return;
+    if (evaluated) return;
+    calculationScreen.textContent = calculationScreen.textContent.toString().slice(0, -1);
+    if (currentOperation !== null) {
+        secondOperand = calculationScreen.textContent.substring(
+            calculationScreen.textContent.indexOf(currentOperation) + 2
+        );
+    }
 }
 
-function addComma() {
-    return;
+function changeSign() {
+    if (evaluated) return;
+    if (secondOperand === "") {
+        calculationScreen.textContent = `-${calculationScreen.textContent}`;
+        firstOperand *= -1;
+    } else {
+        calculationScreen.textContent = `${firstOperand} ${currentOperation} -${secondOperand}`;
+        secondOperand *= -1;
+    }
+
 }
 
-function setCurrentCalculation() {
-    return;
-} 
+function appendPoint() {
+    if (calculationScreen.textContent === "") calculationScreen.textContent = "0";
+    if(calculationScreen.textContent.includes(".")) return;
+    calculationScreen.textContent += ".";
+}
 
 function evaluate() {
     if (currentOperation === null) return;
-    
-    secondOperand = calculationScreen.textContent.substring(
-        calculationScreen.textContent.indexOf(currentOperation) + 2
-    );
-
     if (currentOperation === "÷" && secondOperand === "0") {
         calculationScreen.textContent = 0;
         solutionScreen.textContent = "MATH ERROR";
@@ -74,11 +93,6 @@ function evaluate() {
         currentOperation = null;
         return;
     }
-
-    console.log(firstOperand);
-    console.log(currentOperation);
-    console.log(secondOperand);
-
     solutionScreen.textContent = roundResult(
         operate(currentOperation, firstOperand, secondOperand)
     );
@@ -125,10 +139,10 @@ function operate(operator, a, b) {
         case "-":
             return subtract(a, b); 
         // change to multiply symbol
-        case "*": 
+        case "×": 
             return multiply(a, b);
         // change to divide symbol
-        case "/":
+        case "÷":
             return divide(a, b);
         default:
             return null;
