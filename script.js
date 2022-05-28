@@ -30,7 +30,9 @@ function appendNumber(number) {
     } else {
         calculationScreen.textContent += number;
     }   
-    if (currentOperation !== null) {
+    if (currentOperation === null) {
+        firstOperand = calculationScreen.textContent;
+    } else {
         secondOperand = calculationScreen.textContent.substring(
             calculationScreen.textContent.indexOf(currentOperation) + 2
         );
@@ -40,7 +42,7 @@ function appendNumber(number) {
 function setOperation(operator) {
     if (currentOperation !== null && secondOperand !== "") evaluate(); 
     if (evaluated) calculationScreen.textContent = solutionScreen.textContent;
-    firstOperand = calculationScreen.textContent;
+    // firstOperand = calculationScreen.textContent;
     currentOperation = operator;
     calculationScreen.textContent = `${firstOperand} ${currentOperation} `;
     evaluated = false;
@@ -67,12 +69,15 @@ function deleteNumber() {
 
 function changeSign() {
     if (evaluated) return;
-    if (secondOperand === "") {
-        calculationScreen.textContent = `-${calculationScreen.textContent}`;
+    if (currentOperation === null && secondOperand === "") {
         firstOperand *= -1;
+        calculationScreen.textContent = firstOperand;
+    } else if (secondOperand === "") {
+        firstOperand *= -1;
+        calculationScreen.textContent = `${firstOperand} ${currentOperation} `;
     } else {
-        calculationScreen.textContent = `${firstOperand} ${currentOperation} -${secondOperand}`;
         secondOperand *= -1;
+        calculationScreen.textContent = `${firstOperand} ${currentOperation} ${secondOperand}`;
     }
 
 }
