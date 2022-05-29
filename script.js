@@ -22,6 +22,9 @@ signButton.addEventListener("click", changeSign);
 pointButton.addEventListener("click", appendPoint);
 equalsButton.addEventListener("click", evaluate);
 
+window.addEventListener("keydown", handleKeyboardInput)
+
+
 
 function appendNumber(number) {
     if (evaluated) clearScreen();
@@ -40,20 +43,17 @@ function appendNumber(number) {
     }
 }
 
+function appendPoint() {
+    if ((firstOperand.toString().includes(".") && currentOperation === null) 
+        || (secondOperand.toString().includes("."))) return;
+    calculationScreen.textContent += ".";
+}
+
 function setOperation(operator) {
     if (currentOperation !== null && secondOperand !== "") evaluate(); 
     if (evaluated) calculationScreen.textContent = solutionScreen.textContent;
     currentOperation = operator;
     calculationScreen.textContent = `${firstOperand} ${currentOperation} `;
-    evaluated = false;
-}
-
-function clearScreen() {
-    calculationScreen.textContent = "0"
-    solutionScreen.textContent = "";
-    firstOperand = "";
-    secondOperand = ""; 
-    currentOperation = null;
     evaluated = false;
 }
 
@@ -85,14 +85,16 @@ function changeSign() {
 
 }
 
-function appendPoint() {
-    if ((firstOperand.toString().includes(".") && currentOperation === null) 
-        || (secondOperand.toString().includes("."))) return;
-    calculationScreen.textContent += ".";
+function clearScreen() {
+    calculationScreen.textContent = "0"
+    solutionScreen.textContent = "";
+    firstOperand = "";
+    secondOperand = ""; 
+    currentOperation = null;
+    evaluated = false;
 }
 
 function evaluate() {
-    console.log(firstOperand);
     if (currentOperation === null) return;
     if (currentOperation === "÷" && secondOperand === "0") {
         calculationScreen.textContent = 0;
@@ -115,9 +117,21 @@ function roundResult(number) {
     return Math.round(number * 1000) / 1000;
 }
 
-function convertOperator() {
-    // convert input from keyboard
-    return;
+function handleKeyboardInput(e) {
+    if (e.key>= 0 && e.key<= 9) appendNumber(e.key);
+    if (e.key === ".") appendPoint();
+    if (e.key === "=" || e.key === "Enter") evaluate();
+    if (e.key === "Backspace") deleteNumber();
+    if (e.key === "Escape") clearScreen();
+    if (e.key === "+" || e.key === "-" || e.key === "*" || e.key === "/") 
+        setOperation(convertOperator(e.key));
+}
+
+function convertOperator(keyboardOperator) {
+    if (keyboardOperator === "+") return "+";
+    if (keyboardOperator === "-") return "-";
+    if (keyboardOperator === "*") return "×";
+    if (keyboardOperator === "/") return "÷";
 }
 
 function add(a, b) {
