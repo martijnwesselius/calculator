@@ -30,6 +30,7 @@ function appendNumber(number) {
     } else {
         calculationScreen.textContent += number;
     }   
+    // read operand each time number is appended
     if (currentOperation === null) {
         firstOperand = calculationScreen.textContent;
     } else {
@@ -42,7 +43,6 @@ function appendNumber(number) {
 function setOperation(operator) {
     if (currentOperation !== null && secondOperand !== "") evaluate(); 
     if (evaluated) calculationScreen.textContent = solutionScreen.textContent;
-    // firstOperand = calculationScreen.textContent;
     currentOperation = operator;
     calculationScreen.textContent = `${firstOperand} ${currentOperation} `;
     evaluated = false;
@@ -60,7 +60,10 @@ function clearScreen() {
 function deleteNumber() {
     if (evaluated) return;
     calculationScreen.textContent = calculationScreen.textContent.toString().slice(0, -1);
-    if (currentOperation !== null) {
+    if (!calculationScreen.textContent.toString().includes(currentOperation)) currentOperation = null;
+    if (currentOperation === null) {
+        firstOperand = calculationScreen.textContent;
+    } else {    
         secondOperand = calculationScreen.textContent.substring(
             calculationScreen.textContent.indexOf(currentOperation) + 2
         );
@@ -83,12 +86,13 @@ function changeSign() {
 }
 
 function appendPoint() {
-    if (calculationScreen.textContent === "") calculationScreen.textContent = "0";
-    if(calculationScreen.textContent.includes(".")) return;
+    if ((firstOperand.toString().includes(".") && currentOperation === null) 
+        || (secondOperand.toString().includes("."))) return;
     calculationScreen.textContent += ".";
 }
 
 function evaluate() {
+    console.log(firstOperand);
     if (currentOperation === null) return;
     if (currentOperation === "÷" && secondOperand === "0") {
         calculationScreen.textContent = 0;
@@ -115,7 +119,6 @@ function convertOperator() {
     // convert input from keyboard
     return;
 }
-
 
 function add(a, b) {
     return a + b;

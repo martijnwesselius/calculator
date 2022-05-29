@@ -1,11 +1,11 @@
 :root {
+    --screen: rgb(228, 249, 189);
+    --calculator: rgb(100, 111, 212);
+    --hover: rgb(155, 163, 235);
+    --background: rgb(219, 223, 253);
     --dark-grey: rgb(54, 54, 54);
-    --grey: rgb(163, 163, 163);
-    --white: rgb(254, 254, 254);
     --red: rgb(237, 74, 72);
     --orange: rgb(230, 146, 35); 
-    --black: rgb(0, 0, 0);
-    --screen-green: rgb(228, 249, 189);
 }
 
 * {
@@ -20,29 +20,29 @@ html, body {
     flex-direction: column;
     align-items: center;
     height: 100%;
-    /* background-color: var(--grey); */
+    background-color: var(--background);
     min-width: 500px;
 }
 
 #calculator {
     /* width: 400px; */
-    background-color: var(--grey);
+    background-color: var(--calculator);
     margin-top: 100px;
     padding: 20px;
     border: 1px solid var(--dark-grey);
     border-radius: 1rem;
-    box-shadow: 0 10px 20px 5px var(--grey);
+    box-shadow: 0 10px 20px 5px var(--dark-grey);
 }
 
 #screen {
     font-size: 24px;
     color: var(--dark-grey);
-    background-color: var(--screen-green);
     text-align: end;
+    background-color: var(--screen);
     padding: 0.5rem;
     border: 1px solid var(--dark-grey);
     border-radius: 0.5rem;
-    box-shadow: 0 2.5px 5px 1px var(--grey) inset;
+    box-shadow: 0 2.5px 5px 1px var(--dark-grey) inset;
 }
 
 #calculation {
@@ -55,9 +55,6 @@ html, body {
     height: 48px;
 }
 
-
-
-
 .buttons-grid {
     height: 400px;
     width: 320px;
@@ -65,7 +62,7 @@ html, body {
     grid-template-columns: repeat(4, 1fr);
     grid-template-rows: repeat(5, 1fr);
     gap: 0.5rem;
-    padding: 10px 0;
+    padding: 10px 0 0 0;
 }
 
 button {
@@ -73,6 +70,10 @@ button {
     padding: 1rem 0;
     border: none;
     border-radius: 100%;
+}
+
+button:hover {
+    background-color: var(--hover);
 }
 
 #clear-button:hover,
@@ -86,7 +87,7 @@ button {
 }
 
 button:active {
-    filter: brightness(85%);
+    filter: brightness(80%);
 }
 
 #zero-button {
